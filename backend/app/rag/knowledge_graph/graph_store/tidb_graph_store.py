@@ -945,7 +945,7 @@ class TiDBGraphStore(KnowledgeGraphStore):
                 neighbors.append(
                     {
                         "id": rel.id,
-                        "description": rel.description,
+                        "relationship": rel.description,
                         "source_entity": {
                             "id": rel.source_entity.id,
                             "name": rel.source_entity.name,
