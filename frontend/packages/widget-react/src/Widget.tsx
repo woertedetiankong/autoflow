@@ -12,7 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { type ExperimentalFeatures, ExperimentalFeaturesProvider } from '@/experimental/experimental-features-provider';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState, useSyncExternalStore } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import './Widget.css';
 
 export interface WidgetProps {
@@ -27,6 +27,7 @@ export interface WidgetProps {
   disableAutoThemeDetect?: boolean;
   chatEngine?: string;
   apiBase?: string;
+  src: string;
 }
 
 export interface WidgetInstance {
@@ -35,14 +36,14 @@ export interface WidgetInstance {
   initialized: true;
 }
 
-export const Widget = forwardRef<WidgetInstance, WidgetProps>(({ container, trigger, experimentalFeatures, disableAutoThemeDetect = false, bootstrapStatus, exampleQuestions, icon, buttonIcon, buttonLabel, chatEngine, apiBase }, ref) => {
+export const Widget = forwardRef<WidgetInstance, WidgetProps>(({ container, trigger, experimentalFeatures, disableAutoThemeDetect = false, bootstrapStatus, exampleQuestions, icon, buttonIcon, buttonLabel, chatEngine, src, apiBase }, ref) => {
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches);
   const openRef = useRef(open);
   const darkRef = useRef(dark);
   const [scrollTarget, setScrollTarget] = useState<HTMLDivElement | null>(null);
   const gtagFn = useGtagFn();
-  const shouldDisplayTrigger = useShouldDisplayTrigger(apiBase);
+  const shouldDisplayTrigger = useShouldDisplayTrigger(src, apiBase);
 
   useEffect(() => {
     openRef.current = open;
@@ -230,7 +231,7 @@ window.addEventListener('popstate', (e) => {
   window.dispatchEvent(new CustomEvent('tidbaihistorychange', { detail: { type: 'popstate', params: [e.state] } }));
 });
 
-function useShouldDisplayTrigger (apiBase?: string) {
+function useShouldDisplayTrigger (src: string, apiBase?: string) {
   const pathname = useSyncExternalStore(fire => {
     const callback = () => {
       setTimeout(() => {
@@ -244,9 +245,18 @@ function useShouldDisplayTrigger (apiBase?: string) {
     };
   }, () => window.location.pathname);
 
-  if (!apiBase) {
-    return pathname === '/';
-  }
+  return useMemo(() => {
+    const srcUrl = new URL(src);
 
-  return true;
+    if (!apiBase) {
+      return pathname === '/';
+    } else {
+      const apiBaseUri = new URL(apiBase);
+      if (apiBaseUri.origin === srcUrl.origin) {
+        return pathname;
+      }
+    }
+    return true;
+  }, [pathname, src, apiBase]);
+
 }
