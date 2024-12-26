@@ -41,7 +41,11 @@ admin_llm_options: List[LLMOption] = [
             "api_base": "https://openrouter.ai/api/v1/",
             "is_chat_model": True,
         },
-        config_description="Ensure that the AI server API adheres to the OpenAI format.",
+        config_description=(
+            "`api_base` is the API base URL of the third-party OpenAI-like service, such as OpenRouter; "
+            "`is_chat_model` indicates whether the model is chat model; "
+            "`context_window` is the maximum number of input tokens and output tokens; "
+        ),
         credentials_display_name="API Key",
         credentials_description="The API key of the third-party OpenAI-like service, such as OpenRouter, you can find it in their official website",
         credentials_type="str",
@@ -80,6 +84,26 @@ admin_llm_options: List[LLMOption] = [
         credentials_description="Ollama doesn't require an API key, set a dummy string here is ok",
         credentials_type="str",
         default_credentials="dummy",
+    ),
+    LLMOption(
+        provider=LLMProvider.GITEEAI,
+        provider_display_name="Gitee AI",
+        provider_description="Gitee AI is a third-party model provider that offers ready-to-use cutting-edge model APIs for AI developers.",
+        provider_url="https://ai.gitee.com",
+        default_llm_model="Qwen2.5-72B-Instruct",
+        default_config={
+            "is_chat_model": True,
+            "context_window": 131072,
+        },
+        config_description=(
+            "`is_chat_model` indicates whether the model is chat model; "
+            "`context_window` is the maximum number of input tokens and output tokens; "
+        ),
+        llm_model_description="Find more in https://ai.gitee.com/serverless-api",
+        credentials_display_name="Gitee AI API Key",
+        credentials_description="The API key of Gitee AI, you can find it in https://ai.gitee.com/dashboard/settings/tokens",
+        credentials_type="str",
+        default_credentials="****",
     ),
     LLMOption(
         provider=LLMProvider.ANTHROPIC_VERTEX,
