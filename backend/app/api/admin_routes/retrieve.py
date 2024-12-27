@@ -35,7 +35,7 @@ async def embedding_retrieve(
 
 
 @router.post("/admin/embedding_retrieve")
-async def embedding_retrieve(
+async def embedding_search(
     session: SessionDep,
     user: CurrentSuperuserDep,
     request: RetrieveRequest,
