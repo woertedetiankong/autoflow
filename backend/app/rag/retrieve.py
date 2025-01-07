@@ -73,20 +73,6 @@ class RetrieveService:
         Returns:
             A list of related documents.
         """
-        try:
-            return self._retrieve(
-                question, top_k, similarity_top_k, oversampling_factor
-            )
-        except Exception as e:
-            logger.exception(e)
-
-    def _retrieve(
-        self,
-        question: str,
-        top_k: int = 10,
-        similarity_top_k: Optional[int] = None,
-        oversampling_factor: int = 5,
-    ) -> List[DBDocument]:
         _fast_llm = self.chat_engine_config.get_fast_llama_llm(self.db_session)
         _fast_dspy_lm = self.chat_engine_config.get_fast_dspy_lm(self.db_session)
 
@@ -178,7 +164,7 @@ class RetrieveService:
 
         return source_documents
 
-    def _embedding_retrieve(
+    def embedding_retrieve(
         self,
         question: str,
         top_k: int = 10,

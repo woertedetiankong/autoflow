@@ -20,6 +20,7 @@ from sqlmodel import (
     delete,
     select,
     asc,
+    alias,
 )
 from tidb_vector.sqlalchemy import VectorAdaptor
 
@@ -55,7 +56,7 @@ class TiDBVectorStore(BasePydanticVectorStore):
         self,
         session: Optional[Session] = None,
         chunk_db_model: SQLModel = Chunk,
-        oversampling_factor: int = 5,
+        oversampling_factor: int = 1,
         **kwargs: Any,
     ) -> None:
         """
@@ -196,14 +197,24 @@ class TiDBVectorStore(BasePydanticVectorStore):
 
         if query.filters:
             for f in query.filters.filters:
-                subquery = subquery.where(self._chunk_db_model.meta[f.key] == f.value)
+                subquery = subquery.stmt(self._chunk_db_model.meta[f.key] == f.value)
 
-        subquery = (
+        sub = alias(
             subquery.order_by(asc("distance"))
             .limit(query.similarity_top_k * self._oversampling_factor)
-            .subquery("sub")
+            .subquery(),
+            "sub",
         )
-        stmt = select(subquery).order_by(asc("distance")).limit(query.similarity_top_k)
+        stmt = (
+            select(
+                sub.c.id,
+                sub.c.text,
+                sub.c.meta,
+                sub.c.distance,
+            )
+            .order_by(asc("distance"))
+            .limit(query.similarity_top_k)
+        )
         results = self._session.exec(stmt)
 
         nodes = []
