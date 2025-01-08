@@ -3,10 +3,10 @@ from typing import Optional, List
 
 from fastapi import APIRouter
 from app.models import Document
-from app.api.admin_routes.models import RetrieveRequest
+from app.api.admin_routes.models import ChatEngineBasedRetrieveRequest
 from app.api.deps import SessionDep, CurrentSuperuserDep
-from app.rag.retrieve import RetrieveService
 from llama_index.core.schema import NodeWithScore
+from app.rag.retrieve import retrieve_service
 
 from app.exceptions import InternalServerError, KBNotFound
 
@@ -23,14 +23,17 @@ async def retrieve_documents(
     top_k: Optional[int] = 5,
     similarity_top_k: Optional[int] = None,
     oversampling_factor: Optional[int] = 5,
+    enable_kg_enchance_query_refine: Optional[bool] = True,
 ) -> List[Document]:
     try:
-        retrieve_service = RetrieveService(session, chat_engine)
-        return retrieve_service.retrieve(
-            question,
+        return retrieve_service.chat_engine_retrieve_documents(
+            session,
+            question=question,
             top_k=top_k,
+            chat_engine_name=chat_engine,
             similarity_top_k=similarity_top_k,
             oversampling_factor=oversampling_factor,
+            enable_kg_enchance_query_refine=enable_kg_enchance_query_refine,
         )
     except KBNotFound as e:
         raise e
@@ -48,14 +51,17 @@ async def embedding_retrieve(
     top_k: Optional[int] = 5,
     similarity_top_k: Optional[int] = None,
     oversampling_factor: Optional[int] = 5,
+    enable_kg_enchance_query_refine: Optional[bool] = True,
 ) -> List[NodeWithScore]:
     try:
-        retrieve_service = RetrieveService(session, chat_engine)
-        return retrieve_service.embedding_retrieve(
-            question,
+        return retrieve_service.chat_engine_retrieve_chunks(
+            session,
+            question=question,
             top_k=top_k,
+            chat_engine_name=chat_engine,
             similarity_top_k=similarity_top_k,
             oversampling_factor=oversampling_factor,
+            enable_kg_enchance_query_refine=enable_kg_enchance_query_refine,
         )
     except KBNotFound as e:
         raise e
@@ -68,15 +74,16 @@ async def embedding_retrieve(
 async def embedding_search(
     session: SessionDep,
     user: CurrentSuperuserDep,
-    request: RetrieveRequest,
+    request: ChatEngineBasedRetrieveRequest,
 ) -> List[NodeWithScore]:
     try:
-        retrieve_service = RetrieveService(session, request.chat_engine)
-        return retrieve_service.embedding_retrieve(
+        return retrieve_service.chat_engine_retrieve_chunks(
+            session,
             request.query,
             top_k=request.top_k,
             similarity_top_k=request.similarity_top_k,
             oversampling_factor=request.oversampling_factor,
+            enable_kg_enchance_query_refine=request.enable_kg_enchance_query_refine,
         )
     except KBNotFound as e:
         raise e
