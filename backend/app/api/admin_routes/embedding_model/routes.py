@@ -13,19 +13,29 @@ from app.api.admin_routes.embedding_model.models import (
 )
 from app.api.deps import CurrentSuperuserDep, SessionDep
 from app.exceptions import EmbeddingModelNotFound, InternalServerError
-from app.rag.chat_config import get_embed_model
-from app.rag.embed_model_option import EmbeddingModelOption, admin_embed_model_options
 from app.repositories.embedding_model import embed_model_repo
+from app.rag.embeddings.provider import (
+    EmbeddingProviderOption,
+    embedding_provider_options,
+)
+from app.rag.embeddings.resolver import get_embed_model
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@router.get("/admin/embedding-models/options")
+@router.get("/admin/embedding-models/provider/options")
+def list_embedding_model_provider_options(
+    user: CurrentSuperuserDep,
+) -> List[EmbeddingProviderOption]:
+    return embedding_provider_options
+
+
+@router.get("/admin/embedding-models/options", deprecated=True)
 def get_embedding_model_options(
     user: CurrentSuperuserDep,
-) -> List[EmbeddingModelOption]:
-    return admin_embed_model_options
+) -> List[EmbeddingProviderOption]:
+    return embedding_provider_options
 
 
 @router.post("/admin/embedding-models")

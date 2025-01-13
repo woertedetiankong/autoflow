@@ -11,20 +11,26 @@ from app.api.admin_routes.llm.routes import LLMTestResult
 from app.api.deps import CurrentSuperuserDep, SessionDep
 from app.exceptions import RerankerModelNotFound, InternalServerError
 from app.models import RerankerModel, AdminRerankerModel, ChatEngine
-from app.rag.chat_config import get_reranker_model
-from app.rag.reranker_model_option import (
-    RerankerModelOption,
-    admin_reranker_model_options,
-)
 from app.repositories.reranker_model import reranker_model_repo
+from app.rag.rerankers.provider import RerankerProviderOption, reranker_provider_options
+from app.rag.rerankers.resolver import get_reranker_model
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@router.get("/admin/reranker-models/options")
-def get_reranker_model_options(user: CurrentSuperuserDep) -> List[RerankerModelOption]:
-    return admin_reranker_model_options
+@router.get("/admin/reranker-models/provider/options")
+def list_reranker_model_provider_options(
+    user: CurrentSuperuserDep,
+) -> List[RerankerProviderOption]:
+    return reranker_provider_options
+
+
+@router.get("/admin/reranker-models/options", deprecated=True)
+def get_reranker_model_options(
+    user: CurrentSuperuserDep,
+) -> List[RerankerProviderOption]:
+    return reranker_provider_options
 
 
 @router.post("/admin/reranker-models/test")
