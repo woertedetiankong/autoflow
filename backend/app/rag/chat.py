@@ -834,10 +834,6 @@ class ChatService:
             logger.info(f"clean goal: {clean_goal}, response_format: {response_format}")
             if clean_goal:
                 goal = clean_goal
-                # todo: temporary add this to response_format, need to remove it later
-                response_format["Include SQLs Example Section"] = (
-                    "If (and only if) the answer contains SQL operations, please feel free to provide a example section at the end of the answer, which can provide better understanding for the user."
-                )
         except Exception as e:
             logger.error(f"Failed to parse goal and response format: {e}")
 
