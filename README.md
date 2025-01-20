@@ -61,4 +61,4 @@ AutoFlow is open-source under the Apache License, Version 2.0. You can [find it 
 
 ## Contact
 
-You can reach out to us on [@TiDB_Developer](https://twitter.com/TiDB_Developer) on Twitter.
+You can reach out to us on [Discord](https://discord.gg/XzSW23Jg9p).
