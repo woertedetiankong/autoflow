@@ -57,7 +57,7 @@ We welcome contributions from the community. If you are interested in contributi
 
 ## License
 
-AutoFlow is open-source under the Apache License, Version 2.0. You can [find it here](/LICENSE.txt).
+AutoFlow is open-source under the Apache License, Version 2.0. You can [find it here](https://github.com/pingcap/autoflow/blob/main/LICENSE.txt).
 
 ## Contact
 
