@@ -40,6 +40,7 @@ AutoFlow is an open source graph rag (graphrag: knowledge graph rag) based knowl
 - [LlamaIndex](https://www.llamaindex.ai/) - RAG framework
 - [DSPy](https://github.com/stanfordnlp/dspy) - The framework for programming—not prompting—foundation models
 - [Next.js](https://nextjs.org/) – Framework
+- [Tailwind CSS](https://tailwindcss.com/) – CSS framework
 - [shadcn/ui](https://ui.shadcn.com/) - Design
 
 ## Contributing
