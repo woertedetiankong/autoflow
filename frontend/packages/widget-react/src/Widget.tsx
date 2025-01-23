@@ -140,13 +140,7 @@ export const Widget = forwardRef<WidgetInstance, WidgetProps>(({ container, trig
     <PortalProvider container={container}>
       <BootstrapStatusProvider bootstrapStatus={bootstrapStatus}>
         <ExperimentalFeaturesProvider features={experimentalFeatures}>
-          <ChatsProvider
-            onChatCreated={id => {
-              window.dispatchEvent(new CustomEvent('tidbainewchat', {
-                detail: { id },
-              }));
-            }}
-          >
+          <ChatsProvider>
             <Dialog open={open} onOpenChange={(open) => {
               setOpen(open);
               if (!open) {
