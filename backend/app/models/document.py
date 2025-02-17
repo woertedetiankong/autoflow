@@ -27,6 +27,11 @@ class DocIndexTaskStatus(str, enum.Enum):
     FAILED = "failed"
 
 
+class ContentFormat(str, enum.Enum):
+    TEXT = "text"
+    MARKDOWN = "markdown"
+
+
 class Document(UpdatableBaseModel, table=True):
     # Avoid "expected `enum` but got `str`" error.
     model_config = ConfigDict(use_enum_values=True)
