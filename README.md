@@ -13,6 +13,9 @@
   [![E2E Status](https://img.shields.io/github/check-runs/pingcap/tidb.ai/main?nameFilter=E2E%20Test&label=e2e)](https://tidb-ai-playwright.vercel.app/)
 </div>
 
+> [!WARNING]
+> We strongly suggest not using it in production or for any commercial purposes. This project is still under development rapidly.
+
 ## Introduction
 
 AutoFlow is an open source graph rag (graphrag: knowledge graph rag) based knowledge base tool built on top of [TiDB Vector](https://www.pingcap.com/ai?utm_source=tidb.ai&utm_medium=community) and [LlamaIndex](https://github.com/run-llama/llama_index) and [DSPy](https://github.com/stanfordnlp/dspy).
