@@ -14,7 +14,7 @@
 </div>
 
 > [!WARNING]
-> We strongly suggest not using it in production or for any commercial purposes. This project is still under development rapidly.
+> Autoflow is still in the early stages of development. And we are actively working on it, the next move is to make it to a python package and make it more user-friendly e.g. `pip install autoflow-ai`. If you have any questions or suggestions, please feel free to contact us on [Discussion](https://github.com/pingcap/autoflow/discussions).
 
 ## Introduction
 
